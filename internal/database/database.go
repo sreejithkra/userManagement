@@ -10,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func ConnectDatabase(env config.Env){
+func ConnectDatabase(env config.Env) *gorm.DB {
 	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", env.DB_USER, env.DB_PASSWORD, env.DB_HOST, env.DB_PORT, env.DB_NAME)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -24,9 +24,10 @@ func ConnectDatabase(env config.Env){
 
 	}
 
+	return db
 }
 
-func Automigrate(db *gorm.DB) error{
+func Automigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&models.User{},
 	)
