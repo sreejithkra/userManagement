@@ -23,6 +23,8 @@ func main() {
 
 	fmt.Println(userController)
 
+	router.POST("signup",userController.Signup)
+
 	err:=router.Run(":8086")
 	if err!=nil{
 		fmt.Println("failed to start server")
