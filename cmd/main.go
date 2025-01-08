@@ -5,6 +5,7 @@ import (
 	"userManagement/internal/config"
 	"userManagement/internal/controllers"
 	"userManagement/internal/database"
+	"userManagement/internal/middleware"
 	"userManagement/internal/repository"
 	"userManagement/internal/services"
 
@@ -23,10 +24,16 @@ func main() {
 
 	fmt.Println(userController)
 
-	router.POST("signup",userController.Signup)
+	router.POST("signup", userController.Signup)
+	router.POST("login", userController.Login)
 
-	err:=router.Run(":8086")
-	if err!=nil{
+	userGroup := router.Group("user")
+	userGroup.Use(middleware.JWTMIddleware("user"))
+	userGroup.GET("profile", userController.GetProfile)
+	userGroup.PUT("profile", userController.UpdateProfile)
+
+	err := router.Run(":8086")
+	if err != nil {
 		fmt.Println("failed to start server")
 	}
 

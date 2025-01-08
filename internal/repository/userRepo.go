@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"userManagement/internal/models"
 
 	"gorm.io/gorm"
@@ -13,6 +14,8 @@ type UserRepo struct {
 type IUserRepo interface {
 	GetUserByEmail(email string) (*models.User, error)
 	CreateUser(user *models.User) error
+	GetUserById(userId string) (*models.User, error)
+	UpdateProfile(user *models.User) error
 }
 
 func NewUserRepository(db *gorm.DB) *UserRepo {
@@ -32,5 +35,23 @@ func (repo *UserRepo) GetUserByEmail(email string) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &models.User{}, nil
+	return &user, nil
+}
+
+func (repo *UserRepo) GetUserById(userId string) (*models.User, error) {
+	var user models.User
+	err := repo.Database.Where("id=?", userId).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (c *UserRepo) UpdateProfile(user *models.User) error {
+
+	err := c.Database.Save(user).Error
+	if err != nil {
+		return errors.New("error in update of databse query")
+	}
+	return nil
 }
