@@ -34,7 +34,7 @@ func (c *UserController) Signup(ctx *gin.Context) {
 	err = c.userService.Signup(&user)
 	if err != nil {
 		if err.Error() == models.UserExist {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": models.UserExist})
+			ctx.JSON(http.StatusConflict, gin.H{"error": models.UserExist})
 			return
 		}
 		return

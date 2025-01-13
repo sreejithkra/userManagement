@@ -6,4 +6,5 @@ const(
 	SignupSuccess="user created successfully"
 	UserNotFound="user not found"
 	IncorrectPassword="password mismatch"
+	LoginSuccess="Login Succesful"
 )
