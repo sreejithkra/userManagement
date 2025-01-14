@@ -8,7 +8,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    
       # Step 1: Setup SSH Key
       - name: Setup SSH Key
         env:
@@ -23,26 +22,26 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_IP: ${{ secrets.EC2_IP }}
         run: |
-          ssh -i site.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP '
+          ssh -i user.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP '
             cd /home/ubuntu/userManagement
             git pull origin main
           '
 
-      # Step 3: Build Go Application aaa
+      # Step 3: Testing and Building Go Application
       - name: Testing and Building Go Application
         env:
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_IP: ${{ secrets.EC2_IP }}
         run: |
-          ssh -i site.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP '
-            # Install Go
+          ssh -i user.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP '
+            # Ensure Go is installed
             sudo apt update
             sudo apt install -y golang-go
 
             # Verify Go installation
             go version
             
-            cd /home/ubuntu/user-api-clean-arch
+            cd /home/ubuntu/userManagement
             go mod tidy
             go test ./internal/controllers -v
             go build -o app ./cmd/main.go
@@ -54,11 +53,11 @@ jobs:
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_IP: ${{ secrets.EC2_IP }}
         run: |
-          ssh -i site.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP '
+          ssh -i user.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP '
             sudo systemctl restart user.service
           '
 
       # Step 5: Cleanup SSH Key
       - name: Cleanup
         run: |
-          rm -f site.pem
+          rm -f user.pem
