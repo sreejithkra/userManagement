@@ -44,7 +44,7 @@ jobs:
             cd /home/ubuntu/userManagement
             go mod tidy
             go test ./internal/controllers -v
-            go build -o app ./cmd/main.go
+            go build -o myapp ./cmd/main.go
           '
 
       # Step 4: Restart Application Service
