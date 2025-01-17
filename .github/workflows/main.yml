@@ -54,7 +54,7 @@ jobs:
           EC2_IP: ${{ secrets.EC2_IP }}
         run: |
           ssh -i user.pem -o StrictHostKeyChecking=no $EC2_USER@$EC2_IP '
-            sudo systemctl restart user.service
+            sudo systemctl restart myapp.service
           '
 
       # Step 5: Cleanup SSH Key
